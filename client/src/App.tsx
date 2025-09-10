@@ -17,7 +17,8 @@ interface Message {
   date?: string;
 }
 
-const socket = io('http://localhost:3001');
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const socket = io(API_URL);
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -41,8 +42,8 @@ function App() {
   const fetchData = async () => {
     try {
       const [usersResponse, messagesResponse] = await Promise.all([
-        fetch('http://localhost:3001/api/users'),
-        fetch('http://localhost:3001/api/messages')
+        fetch(`${API_URL}/api/users`),
+        fetch(`${API_URL}/api/messages`)
       ]);
 
       if (!usersResponse.ok || !messagesResponse.ok) {
@@ -66,7 +67,7 @@ function App() {
     if (!newUserName.trim()) return;
     
     try {
-      const response = await fetch('http://localhost:3001/api/users', {
+      const response = await fetch(`${API_URL}/api/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -94,7 +95,7 @@ function App() {
     }
 
     try {
-      await fetch('http://localhost:3001/api/messages', {
+      await fetch(`${API_URL}/api/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
