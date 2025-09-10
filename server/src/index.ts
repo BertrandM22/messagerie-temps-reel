@@ -101,15 +101,13 @@ app.get("/api/health", (req, res) => {
 });
 
 app.post("/api/messages", (req, res) => {
-    const { content, userId, date } = req.body;
-    const user = users.find(u => u.id == userId);
-    const username = user ? user.name : "Utilisateur inconnu";
+    const { content, userId, username, date } = req.body;
     
     const newMessage = {
         id: messages.length + 1,
         content: content,
         userId: userId,
-        username: username,
+        username: username || "Utilisateur anonyme",
         timestamp: new Date().toISOString(),
         date: date
     };

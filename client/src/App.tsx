@@ -102,12 +102,13 @@ function App() {
         },
        body: JSON.stringify({
          content: newMessage,
-       userId: selectedUser.id,
-       date: new Date().toLocaleDateString('fr-FR', { 
-         day: '2-digit', 
-         month: '2-digit' 
+         userId: selectedUser.id,
+         username: selectedUser.name,
+         date: new Date().toLocaleDateString('fr-FR', { 
+           day: '2-digit', 
+           month: '2-digit' 
+         })
        })
-     })
       });
       
       setNewMessage("");
