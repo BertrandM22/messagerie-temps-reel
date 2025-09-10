@@ -31,6 +31,15 @@ function App() {
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const sanitizeText = (text: string): string => {
+    return text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;');
+  };
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -312,7 +321,7 @@ function App() {
                         <div style={{ fontWeight: '500', fontSize: '14px', marginBottom: '4px' }}>
                           {message.userId === selectedUser.id ? 'Vous' : message.username}
                         </div>
-                        <div>{message.content}</div>
+                        <div>{sanitizeText(message.content)}</div>
                         <div style={{ 
                           fontSize: '12px', 
                           marginTop: '4px', 
