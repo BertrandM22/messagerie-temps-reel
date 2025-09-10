@@ -8,10 +8,22 @@ dotenv.config();
 
 const app = express();
 const server = createServer(app);
-const io= new Server(server, {cors: {origin: "*"}});
+const io = new Server(server, {
+  cors: {
+    origin: process.env.NODE_ENV === 'production' 
+      ? [process.env.FRONTEND_URL || "https://your-vercel-app.vercel.app"]
+      : "*",
+    credentials: true
+  }
+});
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || "https://your-vercel-app.vercel.app"]
+    : "*",
+  credentials: true
+}));
 app.use(express.json());
 let users = [
     { id: 1, name: "max", email: "max@teste.com" },
