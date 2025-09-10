@@ -117,6 +117,41 @@ function App() {
     }
   };
 
+  const clearChat = async () => {
+    // Demander le code administrateur de façon sécurisée
+    const adminCode = prompt('🔐 Code administrateur requis pour vider le chat :');
+    
+    if (!adminCode) {
+      return; // Utilisateur a annulé
+    }
+
+    if (!confirm('⚠️ Êtes-vous sûr de vouloir vider tout le chat ? Cette action est irréversible.')) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${API_URL}/api/messages/clear`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ adminCode })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // Le chat sera automatiquement vidé grâce à l'événement WebSocket
+        console.log('Chat vidé avec succès');
+      } else {
+        alert('❌ ' + (result.error || 'Code administrateur incorrect'));
+      }
+    } catch (error) {
+      console.error('Erreur lors du vidage du chat:', error);
+      alert('❌ Erreur lors du vidage du chat');
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -126,8 +161,13 @@ function App() {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
 
+    socket.on('messagesCleared', () => {
+      setMessages([]);
+    });
+
     return () => {
       socket.off('newMessage');
+      socket.off('messagesCleared');
     };
   }, []);
 
@@ -157,6 +197,27 @@ function App() {
         }}>
            Chat en Temps Réel
         </h1>
+
+        <div style={{ marginBottom: '1rem', textAlign: 'center' }}>
+          <button
+            onClick={clearChat}
+            style={{
+              background: '#ff4757',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '10px 20px',
+              fontSize: '14px',
+              cursor: 'pointer',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => (e.target as HTMLButtonElement).style.background = '#ff3742'}
+            onMouseOut={(e) => (e.target as HTMLButtonElement).style.background = '#ff4757'}
+          >
+            🗑️ Vider le chat
+          </button>
+        </div>
 
         {!selectedUser ? (
           <div style={{ 

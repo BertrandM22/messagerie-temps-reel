@@ -31,29 +31,7 @@ let users = [
     { id: 3, name: "Marc", email: "Marc@teste.com" },
 ];
 
-let messages = [
-    { 
-        id: 1,
-        content: "bonjour tout le monde",
-        userId: 2,
-        username: "Nico",
-        timestamp: "2025-01-01T10:00:00Z"
-    },
-    { 
-        id: 2,
-        content: "Hi",
-        userId: 1,
-        username: "max",
-        timestamp: "2025-01-01T10:05:00Z"
-    },
-    { 
-        id: 3,
-        content: "Tout vas bien ?",
-        userId: 3,
-        username: "Marc",
-        timestamp: "2025-01-01T10:10:00Z"
-    }
-];
+let messages: any[] = [];
 
 app.get('/', (req, res) => {
   res.json({
@@ -98,6 +76,21 @@ app.get("/api/health", (req, res) => {
         message: "API fonctionnelle",
         uptime: process.uptime(),
     });
+});
+
+app.delete("/api/messages/clear", (req, res) => {
+    const { adminCode } = req.body;
+    
+    // Vérification du code secret côté serveur
+    if (adminCode !== "Tomtom") {
+        return res.status(403).json({ 
+            error: 'Code administrateur incorrect' 
+        });
+    }
+    
+    messages = [];
+    io.emit('messagesCleared');
+    res.json({ message: 'Chat vidé avec succès', count: 0 });
 });
 
 app.post("/api/messages", (req, res) => {
