@@ -119,13 +119,13 @@ function App() {
 
   const clearChat = async () => {
     // Demander le code administrateur de façon sécurisée
-    const adminCode = prompt('🔐 Code administrateur requis pour vider le chat :');
+    const adminCode = prompt(' Code administrateur requis pour vider le chat :');
     
     if (!adminCode) {
       return; // Utilisateur a annulé
     }
 
-    if (!confirm('⚠️ Êtes-vous sûr de vouloir vider tout le chat ? Cette action est irréversible.')) {
+    if (!confirm('⚠ Êtes-vous sûr de vouloir vider tout le chat ? Cette action est irréversible.')) {
       return;
     }
     
@@ -215,7 +215,7 @@ function App() {
             onMouseOver={(e) => (e.target as HTMLButtonElement).style.background = '#ff3742'}
             onMouseOut={(e) => (e.target as HTMLButtonElement).style.background = '#ff4757'}
           >
-            🗑️ Vider le chat
+             Vider le chat
           </button>
         </div>
 
