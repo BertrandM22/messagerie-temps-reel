@@ -1,0 +1,13 @@
+{
+  "outputDirectory": ".",
+  "rewrites": [
+    {
+      "source": "/api/messages",
+      "destination": "/api/messages"
+    },
+    {
+      "source": "/api/messages/clear",
+      "destination": "/api/clear"
+    }
+  ]
+}
