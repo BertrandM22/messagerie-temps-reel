@@ -1,0 +1,29 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[functions]
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
+# Redirects pour les APIs
+[[redirects]]
+  from = "/api/users"
+  to = "/.netlify/functions/users"
+  status = 200
+
+[[redirects]]
+  from = "/api/messages"
+  to = "/.netlify/functions/messages"
+  status = 200
+
+[[redirects]]
+  from = "/api/messages/clear"
+  to = "/.netlify/functions/clear"
+  status = 200
