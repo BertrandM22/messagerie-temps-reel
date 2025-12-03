@@ -1,12 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
 // Simulation simple - en production, il faudrait une vraie DB
-const messages: any[] = [];
+const users: any[] = [];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Configuration CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
@@ -15,25 +15,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    if (req.method === 'DELETE') {
-      const { adminCode } = req.body;
+    if (req.method === 'GET') {
+      res.status(200).json(users);
+    } else if (req.method === 'POST') {
+      const { name, email } = req.body;
       
-      // Vérification du code secret côté serveur
-      if (adminCode !== "Tomtom") {
-        return res.status(403).json({ 
-          error: 'Code administrateur incorrect' 
-        });
-      }
+      const newUser = {
+        id: users.length + 1,
+        name: name,
+        email: email || ""
+      };
       
-      // Vider les messages
-      messages.length = 0;
-      
-      res.status(200).json({ message: 'Chat vidé avec succès', count: 0 });
+      users.push(newUser);
+      res.status(200).json(newUser);
     } else {
       res.status(405).json({ error: 'Method not allowed' });
     }
   } catch (error) {
-    console.error('Error in clear API:', error);
+    console.error('Error in users API:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 }

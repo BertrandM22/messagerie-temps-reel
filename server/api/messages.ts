@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Variable globale pour stocker les messages (attention: réinitialisée à chaque démarrage)
-let messages: any[] = [];
+// Simulation simple - en production, il faudrait une vraie DB
+const messages: any[] = [];
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Configuration CORS
