@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { io } from 'socket.io-client'
 import './App.css'
 
 interface User {
@@ -18,7 +17,6 @@ interface Message {
 }
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-const socket = io(API_URL);
 
 function App() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -112,6 +110,9 @@ function App() {
       });
       
       setNewMessage("");
+      
+      // Recharger les messages immédiatement après envoi
+      fetchData();
     } catch (error) {
       setError('Erreur lors de l\'envoi du message');
     }
@@ -156,19 +157,21 @@ function App() {
     fetchData();
   }, []);
 
+  // Polling pour actualiser les messages toutes les 3 secondes
   useEffect(() => {
-    socket.on('newMessage', (message) => {
-      setMessages((prevMessages) => [...prevMessages, message]);
-    });
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch(`${API_URL}/api/messages`);
+        if (response.ok) {
+          const newMessages = await response.json();
+          setMessages(newMessages);
+        }
+      } catch (error) {
+        console.error('Erreur lors du polling des messages:', error);
+      }
+    }, 3000); // Actualise toutes les 3 secondes
 
-    socket.on('messagesCleared', () => {
-      setMessages([]);
-    });
-
-    return () => {
-      socket.off('newMessage');
-      socket.off('messagesCleared');
-    };
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
