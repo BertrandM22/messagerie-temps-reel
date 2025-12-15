@@ -1,33 +1,90 @@
 # Messagerie Temps Réel
 
-Une application de messagerie instantanée développée avec React et Node.js, permettant aux utilisateurs de communiquer en temps réel via WebSocket.
-https://messagerie-temps-reel.vercel.app/
+Application de chat en temps réel développée avec React et Netlify Functions.
+
+## Description
+
+Une application web de messagerie permettant aux utilisateurs de créer un compte et d'échanger des messages en temps réel. Les messages sont actualisés automatiquement toutes les 3 secondes.
 
 ## Fonctionnalités
 
-- Communication instantanée en temps réel
-- Création d'utilisateurs personnalisés
-- Interface utilisateur moderne et responsive
-- Défilement automatique vers les nouveaux messages
-- API REST complète pour la gestion des utilisateurs et messages
+- Création d'utilisateurs avec nom et email
+- Envoi et réception de messages
+- Actualisation automatique des conversations
+- Interface responsive et moderne
+- Fonction administrateur pour vider le chat
 
-## Technologies utilisées
+## Technologies
 
-**Frontend:**
-- React  avec TypeScript
-- Vite pour le développement et la compilation
-- Socket.io-client pour la communication WebSocket
-- CSS /Tailwind personnalisé pour le design
+**Frontend**
+- React avec TypeScript
+- Vite pour le build
+- Déployé sur Vercel
 
-**Backend:**
-- Node.js avec Express
-- TypeScript pour la sécurité du typage
-- Socket.io pour les WebSockets
-- CORS pour la gestion des origines
+**Backend**
+- Netlify Functions
+- TypeScript
+- APIs REST
 
-## Installation
+## URLs
+
+- Application : https://messagerie-temps-reel.vercel.app
+- Backend : https://messagerie-backend.netlify.app
+
+## Installation locale
 
 ### Prérequis
+- Node.js 18+
+- npm
+
+### Frontend
+```
+git clone https://github.com/BertrandM22/messagerie-temps-reel.git
+cd messagerie-temps-reel/client
+npm install
+npm run dev
+```
+
+### Backend
+```
+cd messagerie-temps-reel/server
+npm install
+netlify dev
+```
+
+## APIs
+
+- GET /api/users - Liste des utilisateurs
+- POST /api/users - Créer un utilisateur
+- GET /api/messages - Liste des messages
+- POST /api/messages - Envoyer un message
+- DELETE /api/messages/clear - Vider le chat (admin)
+
+## Configuration
+
+Créer un fichier `.env.development` dans le dossier client :
+```
+VITE_API_URL=http://localhost:8888
+```
+
+Pour la production, l'URL est configurée automatiquement.
+
+## Déploiement
+
+Le projet est automatiquement déployé via GitHub Actions :
+- Frontend : Vercel
+- Backend : Netlify
+
+## Utilisation
+
+1. Accéder à l'application web
+2. Créer un utilisateur avec nom et email
+3. Envoyer des messages dans le chat
+4. Les messages s'actualisent automatiquement
+
+## Administration
+
+Pour vider le chat, cliquer sur le bouton "Vider le chat" et entrer le code administrateur.
 - Node.js 
 - npm
 
